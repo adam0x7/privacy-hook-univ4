@@ -4,3 +4,6 @@
 [submodule "lib/v4-periphery"]
 	path = lib/v4-periphery
 	url = https://github.com/uniswap/v4-periphery
+[submodule "lib/tornado-core"]
+	path = lib/tornado-core
+	url = https://github.com/tornadocash/tornado-core

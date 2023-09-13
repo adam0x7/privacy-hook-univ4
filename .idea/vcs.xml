@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="VcsDirectoryMappings">
+    <mapping directory="" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/forge-std" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/forge-std/lib/ds-test" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/tornado-core" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/v4-periphery" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/v4-periphery/lib/forge-gas-snapshot" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/v4-periphery/lib/forge-gas-snapshot/lib/forge-std" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/v4-periphery/lib/forge-gas-snapshot/lib/forge-std/lib/ds-test" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/v4-periphery/lib/forge-std" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/v4-periphery/lib/forge-std/lib/ds-test" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/v4-periphery/lib/openzeppelin-contracts" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/v4-periphery/lib/openzeppelin-contracts/lib/erc4626-tests" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/v4-periphery/lib/openzeppelin-contracts/lib/forge-std" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/v4-periphery/lib/openzeppelin-contracts/lib/forge-std/lib/ds-test" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/v4-periphery/lib/solmate" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/v4-periphery/lib/solmate/lib/ds-test" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/v4-periphery/lib/v4-core" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/v4-periphery/lib/v4-core/lib/forge-gas-snapshot" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/v4-periphery/lib/v4-core/lib/forge-gas-snapshot/lib/forge-std" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/v4-periphery/lib/v4-core/lib/forge-gas-snapshot/lib/forge-std/lib/ds-test" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/v4-periphery/lib/v4-core/lib/forge-std" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/v4-periphery/lib/v4-core/lib/forge-std/lib/ds-test" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/v4-periphery/lib/v4-core/lib/openzeppelin-contracts" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/v4-periphery/lib/v4-core/lib/solmate" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/lib/v4-periphery/lib/v4-core/lib/solmate/lib/ds-test" vcs="Git" />
+  </component>
+</project>

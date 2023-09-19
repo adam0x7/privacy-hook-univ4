@@ -73,9 +73,6 @@ function deposit(bytes32 _commitment,
 
     depositIntoPool(_commitment, insertedIndex, block.timestamp, token1, token2, _denomination, _denomination2);
 }
-//this is happening because you're changing the parameters
-    //tornado cash is probably failing because of the version numbers
-
 
   function depositIntoPool(bytes32 _commitment, 
                            uint32 insertedIndex, 

@@ -1,34 +1,49 @@
-pragma solidity ^0.8.19;
-import {Tornado} from "lib/tornado-core/contracts/Tornado.sol";
+pragma solidity ^0.8.20;
+import {Tornado, IVerifier} from "lib/tornado-core/contracts/Tornado.sol";
+import {IHasher} from "lib/tornado-core/contracts/MerkleTreeWithHistory.sol";
 import { IPoolManager, PoolKey } from "@uniswap/v4-core/contracts/interfaces/IPoolManager.sol";
 import { Currency, CurrencyLibrary } from "@uniswap/v4-core/contracts/types/Currency.sol";
-import { IERC20Minimal } from "@uniswap/v4-periphery/lib/v4-core/contracts/interfaces/external/IERC20Minimal.sol";
+import { IERC20Minimal } from "@uniswap/v4-core/contracts/interfaces/external/IERC20Minimal.sol";
 
 contract PrivacyProxy is Tornado {
 
-    IPoolManager public immutable poolManager;
-    PoolKey public immutable poolKey; 
-    uint256 public denomination2; 
+    struct TokenDeposit {
+        Currency token1;
+        Currency token2;
+    }
+
+    IPoolManager poolManager;
+    PoolKey poolKey;
+    uint256 public denomination2;
+
 
     mapping(Currency => uint256) public tokenBalances;
 
-     event Deposit(bytes32 indexed commitment, 
+     event DepositTokens(bytes32 indexed commitment,
                     uint32 leafIndex, 
                     uint256 timestamp, 
                     Currency token1, 
                     Currency token2, 
                     PoolKey pool);
 
-    event Withdrawal(address to, 
+    event WithdrawalTokens(address to,
                     bytes32 nullifierHash, 
                     address indexed relayer, 
                     uint256 fee);
 
 
-    constructor(IPoolManager _poolManager,
-                PoolKey _poolKey) {
+    constructor(
+        IPoolManager _poolManager,
+        PoolKey memory _poolKey,
+        IVerifier _verifier,
+        IHasher _hasher,
+        uint256 _denomination,
+        uint32 _merkleTreeHeight,
+        uint256 _denomination2
+    ) Tornado(_verifier, _hasher, _denomination, _merkleTreeHeight) {
         poolManager = _poolManager;
         poolKey = _poolKey;
+        denomination2 = _denomination2;
     }
 
 function deposit(bytes32 _commitment, 
@@ -43,30 +58,24 @@ function deposit(bytes32 _commitment,
     uint32 insertedIndex = _insert(_commitment);
     commitments[_commitment] = true;              
 
-    _processDeposit(token1, token2, denomination, _denomination2);
+    _processDeposit();
+
+    IERC20Minimal(Currency.unwrap(token1)).allowance(msg.sender, address(this));
+    IERC20Minimal(Currency.unwrap(token2)).allowance(msg.sender, address(this));
+    IERC20Minimal(Currency.unwrap(token1)).approve(address(this), _denomination);
+    IERC20Minimal(Currency.unwrap(token2)).approve(address(this), _denomination2);
+
+    tokenBalances[token1] += _denomination;
+    tokenBalances[token2] += _denomination2;
+
+    IERC20Minimal(Currency.unwrap(token1)).transfer(address(this), _denomination);
+    IERC20Minimal(Currency.unwrap(token2)).transfer(address(this), _denomination2);
+
+    depositIntoPool(_commitment, insertedIndex, block.timestamp, token1, token2, _denomination, _denomination2);
 }
+//this is happening because you're changing the parameters
+    //tornado cash is probably failing because of the version numbers
 
-  function _processDeposit(bytes32 _commitment, 
-                         uint32 insertedIndex, 
-                         uint256 timestamp, 
-                         Currency token1, 
-                         Currency token2, 
-                         uint256 _denomination, 
-                         uint256 _denomination2) internal override {
-
-        IERC20Minimal(Currency.unwrap(token1)).allowance(msg.sender, address(this));
-        IERC20Minimal(Currency.unwrap(token2)).allowance(msg.sender, address(this));
-        IERC20Minimal(Currency.unwrap(token1)).approve(address(this), _denomination);
-        IERC20Minimal(Currency.unwrap(token2)).approve(address(this), _denomination2);
-
-        tokenBalances[token1] += _denomination;
-        tokenBalances[token2] += _denomination2;
-
-        IERC20Minimal(Currency.unwrap(token1)).transfer(address(this), _denomination);
-        IERC20Minimal(Currency.unwrap(token2)).transfer(address(this), _denomination2);
-
-        depositIntoPool(_commitment, insertedIndex, timestamp, token1, token2, _denomination, _denomination2);
-  }
 
   function depositIntoPool(bytes32 _commitment, 
                            uint32 insertedIndex, 
@@ -78,6 +87,29 @@ function deposit(bytes32 _commitment,
         poolManager.donate(poolKey, _denomination, _denomination2, "");
         tokenBalances[token1] -= _denomination;
         tokenBalances[token2] -= _denomination2;
-        emit Deposit(_commitment, insertedIndex, block.timestamp, _denomination, _denomination2, poolKey);
+        emit DepositTokens(_commitment, insertedIndex, timestamp, token1, token2, poolKey);
   }
+
+    function _processDeposit() internal override {
+
+    }
+
+    function _processWithdraw(
+        address payable _recipient,
+        address payable _relayer,
+        uint256 _fee,
+        uint256 _refund
+    ) internal override {
+        // sanity checks
+//        require(msg.value == 0, "Message value is supposed to be zero for ETH instance");
+//        require(_refund == 0, "Refund value is supposed to be zero for ETH instance");
+//
+//        (bool success, ) = _recipient.call{ value: denomination - _fee }("");
+//        require(success, "payment to _recipient did not go thru");
+//        if (_fee > 0) {
+//            (success, ) = _relayer.call{ value: _fee }("");
+//            require(success, "payment to _relayer did not go thru");
+//        }
+    }
+
 }

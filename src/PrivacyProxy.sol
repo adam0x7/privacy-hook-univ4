@@ -7,11 +7,6 @@ import { IERC20Minimal } from "@uniswap/v4-core/contracts/interfaces/external/IE
 
 contract PrivacyProxy is Tornado {
 
-    struct TokenDeposit {
-        Currency token1;
-        Currency token2;
-    }
-
     IPoolManager poolManager;
     PoolKey poolKey;
     uint256 public denomination2;
@@ -43,6 +38,7 @@ contract PrivacyProxy is Tornado {
     ) Tornado(_verifier, _hasher, _denomination, _merkleTreeHeight) {
         poolManager = _poolManager;
         poolKey = _poolKey;
+        denomination = _denomination;
         denomination2 = _denomination2;
     }
 

@@ -62,6 +62,12 @@ contract PrivacyProxyTest is HookTest, Deployers, GasSnapshot {
         poolId = poolKey.toId();
         manager.initialize(poolKey, SQRT_RATIO_1_1, ZERO_BYTES);
 
+        modifyPositionRouter.modifyPosition(poolKey, IPoolManager.ModifyPositionParams(-60, 60, 10 ether));
+        modifyPositionRouter.modifyPosition(poolKey, IPoolManager.ModifyPositionParams(-120, 120, 10 ether));
+        modifyPositionRouter.modifyPosition(
+            poolKey, IPoolManager.ModifyPositionParams(TickMath.minUsableTick(60), TickMath.maxUsableTick(60), 10 ether)
+        );
+
         privacyHook = new PrivacyHook(manager);
         proxy = new PrivacyProxy(manager, poolKey, verifier, hasher, 100, 20, 200);
     }
